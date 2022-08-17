@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  # laravel
+  laravel:
+    build:
+      args:
+        user: laravel
+        uid: 1000
+      context: .
+      dockerfile: ./.docker/Dockerfile
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/html/
+    volumes:
+      - ./:/var/www/html/
+    networks:
+      - myNetwork
+  # nginx
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - myNetwork
+  #MySQL Service
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: laravel
+    volumes:
+      - mysqldata:/var/lib/mysql/
+    networks:
+      - myNetwork
+  # phpmyadmin
+  phpmyadmin:
+    image: 'phpmyadmin'
+    container_name: phpmyadmin
+    environment:
+        PMA_HOST: mysql
+        PMA_PASSWORD: laravel
+        PMA_ARBITRARY: 1
+    restart: always
+    ports:
+        - 8080:80
+    networks:
+        - myNetwork
+#Docker Networks
+networks:
+  myNetwork:
+    driver: bridge
+#Volumes
+volumes:
+  mysqldata:
+    driver: local
