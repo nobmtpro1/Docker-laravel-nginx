@@ -40,7 +40,7 @@ services:
       MYSQL_PASSWORD: laravel
       MYSQL_ROOT_PASSWORD: laravel
     volumes:
-      - mysqldata:/var/lib/mysql/
+      - ./.docker/mysql/data/:/var/lib/mysql/
     networks:
       - myNetwork
   # phpmyadmin
@@ -60,7 +60,3 @@ services:
 networks:
   myNetwork:
     driver: bridge
-#Volumes
-volumes:
-  mysqldata:
-    driver: local
