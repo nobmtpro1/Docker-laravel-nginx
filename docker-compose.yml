@@ -56,6 +56,18 @@ services:
         - 8080:80
     networks:
         - myNetwork
+  # rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.8.25-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./.docker/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - myNetwork
 #Docker Networks
 networks:
   myNetwork:

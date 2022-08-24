@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // dd(User::all()->toArray());
-    // return view('welcome');
-    return '<a href="/test" >test</a>';
-});
+Route::get('/', [HomeController::class,'index']);
+Route::get('/worker', [HomeController::class,'worker']);
 
 Route::get('/test', function () {
     return '<a href="/" >home</a>';
